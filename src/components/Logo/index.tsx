@@ -1,4 +1,4 @@
-import logoImg from '../../assets/logo.svg';
+import { logoImg } from '../../assets/vectors';
 
 import { Wrapper } from './styles'
 
