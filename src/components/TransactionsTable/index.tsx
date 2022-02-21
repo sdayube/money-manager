@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
+
 import { formatCurrency } from '../../helpers/formatCurrency';
+import { api } from '../../services/api';
+
 import { Container } from './styles';
 
 
 export function TransactionsTable() {
   const [desenvolvimento, aluguel] = [1200000, -300000];
   useEffect(() => {
-    fetch('http://localhost:3000/api/transactions')
-      .then(response => response.json())
-      .then(data => console.log(data));
+    api.get('transactions').then(response => { 
+      console.log(response.data);
+    });
   }, []);
 
   return (
