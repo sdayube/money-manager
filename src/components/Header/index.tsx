@@ -1,12 +1,19 @@
 import { Logo } from '../Logo';
 import { Container, Content } from './styles';
 
-export function Header() {
+interface HeaderProps {
+  onOpenTransactionModal: () => void;
+}
+
+export function Header({onOpenTransactionModal}: HeaderProps) {
   return (
     <Container>
       <Content>
         <Logo />
-        <button type="button">
+        <button
+          type="button"
+          onClick={onOpenTransactionModal}
+        >
           Add transaction
         </button>
       </Content>
