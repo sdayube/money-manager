@@ -4,6 +4,7 @@ import { GlobalStyle } from './assets/styles/global'
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
 import { AddTransactionModal } from './components/AddTransactionModal';
+import { TransactionsProvider } from './context';
 
 export function App() {
   const [
@@ -20,7 +21,7 @@ export function App() {
   }
   
   return (
-    <>
+    <TransactionsProvider>
       <GlobalStyle />
 
       <AddTransactionModal
@@ -31,6 +32,6 @@ export function App() {
       <Header onOpenTransactionModal={handleAddTransactionModalOpen} />
 
       <Dashboard />
-    </>
+    </TransactionsProvider>
   );
 }
