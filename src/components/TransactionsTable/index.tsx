@@ -1,16 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { formatCurrency } from '../../helpers/formatCurrency';
+import { formatCurrency, formatDate } from '../../helpers/formatters';
 import { api } from '../../services/api';
 
 import { Container } from './styles';
 
+interface Transaction {
+  id: number;
+  title: string;
+  type: 'revenue' | 'expense';
+  value: number;
+  category: string;
+  createdAt: string;
+}
 
 export function TransactionsTable() {
-  const [desenvolvimento, aluguel] = [1200000, -300000];
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
   useEffect(() => {
-    api.get('transactions').then(response => { 
+    api.get('transactions').then(response => {
       console.log(response.data);
+      setTransactions(response.data.transactions);
     });
   }, []);
 
@@ -26,18 +36,14 @@ export function TransactionsTable() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td className='deposit'>{formatCurrency(desenvolvimento)}</td>
-            <td>Desenvolvimento</td>
-            <td>21/02/2021</td>
-          </tr>
-          <tr>
-            <td>Aluguel</td>
-            <td className='withdrawal'>{formatCurrency(aluguel)}</td>
-            <td>Moradia</td>
-            <td>21/02/2021</td>
-          </tr>
+          {transactions.map((transaction) => (
+            <tr key={transaction.id}>
+              <td>{transaction.title}</td>
+              <td className={transaction.type}>{formatCurrency(transaction.value)}</td>
+              <td>{transaction.category}</td>
+              <td>{formatDate(transaction.createdAt)}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </Container>

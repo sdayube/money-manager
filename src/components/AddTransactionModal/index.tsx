@@ -4,7 +4,7 @@ import { closeImg, depositsImg, withdrawalsImg } from '../../assets/vectors'
 
 import { Form, TypeWrapper, TypeButton } from './styles';
 
-import { formatCurrency, parseCurrency } from '../../helpers/formatCurrency';
+import { formatCurrency, parseCurrency } from '../../helpers/formatters';
 import { api } from '../../services/api';
 
 interface AddTransactionModalProps {
@@ -22,6 +22,13 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
   const [type, setType] = useState('revenue');
   const [category, setCategory] = useState('');
 
+  function handleCleanup() {
+    setTitle('');
+    setValue(0);
+    setType('revenue');
+    setCategory('');
+  }
+
   function handleAddTransaction(e: FormEvent) {
     e.preventDefault();
 
@@ -33,6 +40,8 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
     };
 
     api.post('transactions', data);
+    onClose();
+    handleCleanup();
   }
 
   return (
@@ -46,7 +55,7 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
         <img src={closeImg} alt="Cancelar nova transação" />
       </button>
 
-      <Form>
+      <Form onSubmit={handleAddTransaction}>
         <h2>New Transaction</h2>
 
         <input
@@ -57,7 +66,7 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
 
         <input
           placeholder="Value"
-          value={formatCurrency(value)}
+          value={(type === 'expense' ? '-' : '') + formatCurrency(value)}
           onChange={e => setValue(parseCurrency(e.target.value))}
         />
 
@@ -89,7 +98,7 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
           onChange={e => setCategory(e.target.value)}
         />
 
-        <button type="submit" onSubmit={handleAddTransaction}>
+        <button type="submit">
           Add Transaction
         </button>
       </Form>

@@ -1,6 +1,6 @@
 import { Container } from './styles';
 import { depositsImg, withdrawalsImg, totalImg } from '../../assets/vectors';
-import { formatCurrency } from '../../helpers/formatCurrency';
+import { formatCurrency } from '../../helpers/formatters';
 
 export function Summary() {
   const [deposits, withdrawals, total] = [200, 100, 100];
