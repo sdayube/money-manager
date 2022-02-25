@@ -1,11 +1,11 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import Modal from 'react-modal';
-import { closeImg, depositsImg, withdrawalsImg } from '../../assets/vectors'
 
+import { closeImg, depositsImg, withdrawalsImg } from '../../assets/vectors'
 import { Form, TypeWrapper, TypeButton } from './styles';
 
 import { formatCurrency, parseCurrency } from '../../helpers/formatters';
-import { api } from '../../services/api';
+import { TransactionsContext } from '../../context';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -22,6 +22,8 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
   const [type, setType] = useState('revenue');
   const [category, setCategory] = useState('');
 
+  const { addTransaction } = useContext(TransactionsContext);
+
   function handleCleanup() {
     setTitle('');
     setValue(0);
@@ -29,17 +31,16 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
     setCategory('');
   }
 
-  function handleAddTransaction(e: FormEvent) {
+  async function handleAddTransaction(e: FormEvent) {
     e.preventDefault();
 
-    const data = {
+    await addTransaction({
       title,
-      value: type === 'revenue' ? value : -value,
-      type,
+      value,
+      type: type as 'revenue' | 'expense',
       category,
-    };
+    });
 
-    api.post('transactions', data);
     onClose();
     handleCleanup();
   }
