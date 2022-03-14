@@ -1,15 +1,27 @@
+import { useContext } from 'react';
 import { Container } from './styles';
 import { depositsImg, withdrawalsImg, totalImg } from '../../assets/vectors';
 import { formatCurrency } from '../../helpers/formatters';
+import { TransactionsContext } from '../../context/TransactionsContext';
 
 export function Summary() {
-  const [deposits, withdrawals, total] = [200, 100, 100];
+  const { transactions }= useContext(TransactionsContext);
+
+  const total = transactions.reduce((acc, val) => acc + val.value, 0);
+
+  const deposits = transactions
+    .filter(transaction => transaction.type === 'revenue')
+    .reduce((acc, transaction) => acc + transaction.value, 0);
+  
+  const withdrawals = transactions
+    .filter(transaction => transaction.type === 'expense')
+    .reduce((acc, transaction) => acc + transaction.value, 0);
 
   return(
     <Container>
       <div>
         <header>
-          <p>Entradas</p>
+          <p>Deposits</p>
           <img src={depositsImg} alt="" aria-hidden />
         </header>
         <strong>
