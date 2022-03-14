@@ -1,11 +1,11 @@
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Modal from 'react-modal';
 
 import { closeImg, depositsImg, withdrawalsImg } from '../../assets/vectors'
 import { Form, TypeWrapper, TypeButton } from './styles';
 
 import { formatCurrency, parseCurrency } from '../../helpers/formatters';
-import { TransactionsContext } from '../../context';
+import { useTransactions } from '../../hooks';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ export function AddTransactionModal(props: AddTransactionModalProps) {
   const [type, setType] = useState('revenue');
   const [category, setCategory] = useState('');
 
-  const { addTransaction } = useContext(TransactionsContext);
+  const { addTransaction } = useTransactions();
 
   function handleCleanup() {
     setTitle('');
